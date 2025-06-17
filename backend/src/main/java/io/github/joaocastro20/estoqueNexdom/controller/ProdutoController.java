@@ -23,4 +23,9 @@ public class ProdutoController {
     public ResponseEntity<Page<Produto>> listarTodos(Pageable pageable) {
         return ResponseEntity.ok(produtoService.listarTodos(pageable));
     }
+
+    @PostMapping
+    public ResponseEntity<Produto> salvar(@RequestBody Produto produto) {
+        return ResponseEntity.ok(produtoService.salvar(produto));
+    }
 }
