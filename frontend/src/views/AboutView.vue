@@ -13,7 +13,7 @@
       <Column field="valorFornecedor" header="Valor" style="width: 25%" />
       <Column header="Ações" style="width: 20%">
         <template #body="slotProps">
-          <button @click="editCustomer(slotProps.data)" class="p-button p-button-sm p-button-text">
+          <button @click="editCustomerForm(slotProps.data)" class="p-button p-button-sm p-button-text">
             ✏️
           </button>
           <button @click="deleteCustomer(slotProps.data)" class="p-button p-button-sm p-button-danger p-button-text">
@@ -24,44 +24,50 @@
     </DataTable>
   </div>
 
-  <Button label="Show" @click="visible = true">Novo</Button>
+  <Button label="Novo" @click="openNewDialog">Novo</Button>
 
-<Dialog v-model:visible="visible" header="Salvar Novo Produto" :style="{ width: '25rem' }">
+<Dialog v-model:visible="visible" :header="isEditing ? 'Editar Produto' : 'Novo Produto'" :style="{ width: '25rem' }">
   <div class="flex items-center gap-4 mb-4">
     <label for="descricao" class="font-semibold w-24">Descrição</label>
-    <InputText id="descricao" class="flex-auto" v-model="form.descricao" autocomplete="off" />
+    <InputText v-model="form.descricao" id="descricao" class="flex-auto" autocomplete="off" />
   </div>
-  
+
   <div class="flex items-center gap-4 mb-4">
     <label for="codigo" class="font-semibold w-24">Código</label>
-    <InputText id="codigo" class="flex-auto" v-model="form.codigo" autocomplete="off" />
+    <InputText
+      v-model="form.codigo"
+      id="codigo"
+      class="flex-auto"
+      autocomplete="off"
+      @input="form.codigo = form.codigo.replace(/\D/g, '')"
+    />
   </div>
-  
+
   <div class="flex items-center gap-4 mb-4">
-    <label for="tipoProduto" class="font-semibold w-24">Tipo</label>
+    <label for="tipo" class="font-semibold w-24">Tipo</label>
     <Dropdown
-      id="tipoProduto"
-      v-model="form.tipoProduto"
       :options="options"
+      id="tipo"
+      v-model="form.tipoProduto"
       option-label="name"
       option-value="code"
       placeholder="Selecione"
       class="flex-auto"
     />
   </div>
-  
+
   <div class="flex items-center gap-4 mb-4">
-    <label for="valorFornecedor" class="font-semibold w-24">Valor</label>
-    <InputText id="valorFornecedor" class="flex-auto" v-model="form.valorFornecedor" autocomplete="off" />
+    <label for="valor" class="font-semibold w-24">Valor</label>
+    <InputText v-model="form.valorFornecedor" id="valor" class="flex-auto" autocomplete="off" />
   </div>
   <div class="flex items-center gap-4 mb-4">
-    <label for="quantidadeEstoque" class="font-semibold w-24">Quantidade Estoque</label>
-    <InputText id="quantidadeEstoque" class="flex-auto" v-model="form.quantidadeEstoque" autocomplete="off" />
+    <label for="quantidadeEstoque" class="font-semibold w-24">Quantidade</label>
+    <InputText v-model="form.quantidadeEstoque" id="quantidadeEstoque" class="flex-auto" autocomplete="off" />
   </div>
 
   <div class="flex justify-end gap-2">
     <Button type="button" label="Cancelar" severity="secondary" @click="visible = false" />
-    <Button type="button" label="Salvar" @click="salvarCustomer()" />
+    <Button type="button" label="Salvar" @click="salvarCustomer" />
   </div>
 </Dialog>
    
@@ -79,13 +85,33 @@ const customers = ref([])
 
 const selectedCity = ref(null)
 
+const isEditing = ref(false)
+
 const options = [
   { name: 'ELETRÔNICO', code: 'ELETRÔNICO' },
   { name: 'ELETRODOMÉSTICO', code: 'ELETRODOMÉSTICO' },
   { name: 'MÓVEL', code: 'MÓVEL' }
 ]
 
+function openNewDialog() {
+  isEditing.value = false
+  form.value = {
+    id: null,
+    descricao: '',
+    codigo: '',
+    tipoProduto: null,
+    valorFornecedor: 0,
+    quantidadeEstoque: 0
+  }
+  visible.value = true
+}
 
+function editCustomerForm(customer) {
+  console.log("🚀 ~ editCustomerForm ~ customer:", customer)
+  isEditing.value = true
+  form.value = { ...customer } // copia os dados para edição
+  visible.value = true
+}
 
 const visible = ref(false)
 
@@ -116,20 +142,38 @@ async function fetchSalvarCustomer() {
     const response = await axios.post('http://localhost:8080/api/produtos', form.value)
     console.log('Produto salvo:', response.data)
     visible.value = false
-    await fetchCustomers() // recarrega tabela
+    await fetchCustomers()
     form.value = {
       descricao: '',
-      codigo: '',
+      codigo: 0,
       tipoProduto: '',
-      valorFornecedor: ''
+      valorFornecedor: 0
     }
   } catch (error) {
     console.error('Erro ao salvar produto:', error)
   }
 }
 
+async function fetchAlterarCustomer(codigo) {
+  try {
+    await axios.put(`http://localhost:8080/api/produtos/${codigo}`, form.value)
+    console.log('Produto salvo:', response.data)
+    visible.value = false
+    await fetchCustomers() 
+    form.value = {
+      descricao: '',
+      codigo: 0,
+      tipoProduto: '',
+      valorFornecedor: 0
+    }
+  } catch (error) {
+    console.error('Erro ao atualizar produto:', error)
+  }
+}
+
 function editCustomer(customer) {
   console.log('Editar:', customer)
+  editCustomerForm()
 }
 
 function deleteCustomer(customer) {
@@ -137,10 +181,17 @@ function deleteCustomer(customer) {
 }
 
 function salvarCustomer(customer) {
-  console.log('salvar:', customer)
-  console.log('salvar 2:', form.value)
-  fetchSalvarCustomer();
+  console.log('salvar:', customer.value)
+  console.log('salvar 2:', form.value.codigo)
+ console.log("🚀 ~ salvarCustomer ~ isEditing:", isEditing.value)
+  
+  if(isEditing.value){
+    fetchAlterarCustomer(form.value.codigo)
+  }else{
+    fetchSalvarCustomer();
+  }
 }
+  
 </script>
 
 <style>
