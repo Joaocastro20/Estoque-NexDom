@@ -1,12 +1,7 @@
 <template>
   <div class="card">
-    <DataTable
-      :value="customers"
-      paginator
-      :rows="5"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
-      tableStyle="min-width: 50rem"
-    >
+    <DataTable :value="customers" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
+      tableStyle="min-width: 50rem">
       <Column field="descricao" header="Descrição" style="width: 25%" />
       <Column field="codigo" header="Codigo" style="width: 25%" />
       <Column field="tipoProduto" header="Tipo" style="width: 25%" />
@@ -19,6 +14,12 @@
           <button @click="deleteCustomer(slotProps.data)" class="p-button p-button-sm p-button-danger p-button-text">
             🗑️
           </button>
+          <button @click="incrementItem(slotProps.data)" class="p-button p-button-sm p-button-success p-button-text">
+            ➕
+          </button>
+          <button @click="decrementItem(slotProps.data)" class="p-button p-button-sm p-button-warning p-button-text">
+            ➖
+          </button>
         </template>
       </Column>
     </DataTable>
@@ -26,56 +27,44 @@
 
   <Button label="Novo" @click="openNewDialog">Novo</Button>
 
-<Dialog v-model:visible="visible" :header="isEditing ? 'Editar Produto' : 'Novo Produto'" :style="{ width: '25rem' }">
-  <div class="flex items-center gap-4 mb-4">
-    <label for="descricao" class="font-semibold w-24">Descrição</label>
-    <InputText v-model="form.descricao" id="descricao" class="flex-auto" autocomplete="off" />
-  </div>
+  <Dialog v-model:visible="visible" :header="isEditing ? 'Editar Produto' : 'Novo Produto'" :style="{ width: '25rem' }">
+    <div class="flex items-center gap-4 mb-4">
+      <label for="descricao" class="font-semibold w-24">Descrição</label>
+      <InputText v-model="form.descricao" id="descricao" class="flex-auto" autocomplete="off" />
+    </div>
 
-  <div class="flex items-center gap-4 mb-4">
-    <label for="codigo" class="font-semibold w-24">Código</label>
-    <InputText
-      v-model="form.codigo"
-      id="codigo"
-      class="flex-auto"
-      autocomplete="off"
-      @input="form.codigo = form.codigo.replace(/\D/g, '')"
-    />
-  </div>
+    <div class="flex items-center gap-4 mb-4">
+      <label for="codigo" class="font-semibold w-24">Código</label>
+      <InputText v-model="form.codigo" id="codigo" class="flex-auto" autocomplete="off"
+        @input="form.codigo = form.codigo.replace(/\D/g, '')" />
+    </div>
 
-  <div class="flex items-center gap-4 mb-4">
-    <label for="tipo" class="font-semibold w-24">Tipo</label>
-    <Dropdown
-      :options="options"
-      id="tipo"
-      v-model="form.tipoProduto"
-      option-label="name"
-      option-value="code"
-      placeholder="Selecione"
-      class="flex-auto"
-    />
-  </div>
+    <div class="flex items-center gap-4 mb-4">
+      <label for="tipo" class="font-semibold w-24">Tipo</label>
+      <Dropdown :options="options" id="tipo" v-model="form.tipoProduto" option-label="name" option-value="code"
+        placeholder="Selecione" class="flex-auto" />
+    </div>
 
-  <div class="flex items-center gap-4 mb-4">
-    <label for="valor" class="font-semibold w-24">Valor</label>
-    <InputText v-model="form.valorFornecedor" id="valor" class="flex-auto" autocomplete="off" />
-  </div>
-  <div class="flex items-center gap-4 mb-4">
-    <label for="quantidadeEstoque" class="font-semibold w-24">Quantidade</label>
-    <InputText v-model="form.quantidadeEstoque" id="quantidadeEstoque" class="flex-auto" autocomplete="off" />
-  </div>
+    <div class="flex items-center gap-4 mb-4">
+      <label for="valor" class="font-semibold w-24">Valor</label>
+      <InputText v-model="form.valorFornecedor" id="valor" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+      <label for="quantidadeEstoque" class="font-semibold w-24">Quantidade</label>
+      <InputText v-model="form.quantidadeEstoque" id="quantidadeEstoque" class="flex-auto" autocomplete="off" />
+    </div>
 
-  <div class="flex justify-end gap-2">
-    <Button type="button" label="Cancelar" severity="secondary" @click="visible = false" />
-    <Button type="button" label="Salvar" @click="salvarCustomer" />
-  </div>
-</Dialog>
-   
+    <div class="flex justify-end gap-2">
+      <Button type="button" label="Cancelar" severity="secondary" @click="visible = false" />
+      <Button type="button" label="Salvar" @click="salvarCustomer" />
+    </div>
+  </Dialog>
+
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import  DataTable  from 'primevue/datatable'
+import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import axios from 'axios'
 import InputText from 'primevue/inputtext'
@@ -131,7 +120,7 @@ async function fetchCustomers() {
     const response = await axios.get('http://localhost:8080/api/produtos?page=0&size=5&sort=id,asc')
     customers.value = response.data.content
     console.log("🚀 ~ fetchCustomers ~ response.data:", response.data)
-    
+
   } catch (error) {
     console.error('Erro ao buscar clientes:', error)
   }
@@ -159,7 +148,7 @@ async function fetchAlterarCustomer(codigo) {
     await axios.put(`http://localhost:8080/api/produtos/${codigo}`, form.value)
     console.log('Produto salvo:', response.data)
     visible.value = false
-    await fetchCustomers() 
+    await fetchCustomers()
     form.value = {
       descricao: '',
       codigo: 0,
@@ -179,19 +168,25 @@ function editCustomer(customer) {
 function deleteCustomer(customer) {
   console.log('Excluir:', customer)
 }
+function incrementItem(customer) {
+  console.log('increment:', customer)
+}
+function decrementItem(customer) {
+  console.log('increment:', customer)
+}
 
 function salvarCustomer(customer) {
   console.log('salvar:', customer.value)
   console.log('salvar 2:', form.value.codigo)
- console.log("🚀 ~ salvarCustomer ~ isEditing:", isEditing.value)
-  
-  if(isEditing.value){
+  console.log("🚀 ~ salvarCustomer ~ isEditing:", isEditing.value)
+
+  if (isEditing.value) {
     fetchAlterarCustomer(form.value.codigo)
-  }else{
+  } else {
     fetchSalvarCustomer();
   }
 }
-  
+
 </script>
 
 <style>
