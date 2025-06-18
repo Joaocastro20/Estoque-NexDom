@@ -1,5 +1,6 @@
 package io.github.joaocastro20.estoqueNexdom.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoMovimentacao;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,6 +21,7 @@ public class MovimentoEstoque {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "produto_id")
+    @JsonBackReference
     private Produto produto;
 
     @Column(name = "tipo_movimentacao", nullable = false, length = 10)
