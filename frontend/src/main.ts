@@ -22,6 +22,7 @@ import 'primeicons/primeicons.css'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 
+
 const app = createApp(App)
 
 app.use(router)
@@ -32,5 +33,6 @@ app.component('Column', Column)
 app.component('Dialog', Dialog)
 app.component('Button', Button)
 app.component('InputText', InputText)
+// app.component('Select', Select)
 
 app.mount('#app')

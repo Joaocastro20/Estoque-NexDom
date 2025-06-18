@@ -27,19 +27,42 @@
   <Button label="Show" @click="visible = true">Novo</Button>
 
 <Dialog v-model:visible="visible" header="Salvar Novo Produto" :style="{ width: '25rem' }">
-    <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span>
-    <div class="flex items-center gap-4 mb-4">
-        <label for="username" class="font-semibold w-24">Username</label>
-        <InputText id="username" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex items-center gap-4 mb-8">
-        <label for="email" class="font-semibold w-24">Email</label>
-        <InputText id="email" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex justify-end gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
-        <Button type="button" label="Save" @click="visible = false"></Button>
-    </div>
+  <div class="flex items-center gap-4 mb-4">
+    <label for="descricao" class="font-semibold w-24">Descrição</label>
+    <InputText id="descricao" class="flex-auto" v-model="form.descricao" autocomplete="off" />
+  </div>
+  
+  <div class="flex items-center gap-4 mb-4">
+    <label for="codigo" class="font-semibold w-24">Código</label>
+    <InputText id="codigo" class="flex-auto" v-model="form.codigo" autocomplete="off" />
+  </div>
+  
+  <div class="flex items-center gap-4 mb-4">
+    <label for="tipoProduto" class="font-semibold w-24">Tipo</label>
+    <Dropdown
+      id="tipoProduto"
+      v-model="form.tipoProduto"
+      :options="options"
+      option-label="name"
+      option-value="code"
+      placeholder="Selecione"
+      class="flex-auto"
+    />
+  </div>
+  
+  <div class="flex items-center gap-4 mb-4">
+    <label for="valorFornecedor" class="font-semibold w-24">Valor</label>
+    <InputText id="valorFornecedor" class="flex-auto" v-model="form.valorFornecedor" autocomplete="off" />
+  </div>
+  <div class="flex items-center gap-4 mb-4">
+    <label for="quantidadeEstoque" class="font-semibold w-24">Quantidade Estoque</label>
+    <InputText id="quantidadeEstoque" class="flex-auto" v-model="form.quantidadeEstoque" autocomplete="off" />
+  </div>
+
+  <div class="flex justify-end gap-2">
+    <Button type="button" label="Cancelar" severity="secondary" @click="visible = false" />
+    <Button type="button" label="Salvar" @click="salvarCustomer()" />
+  </div>
 </Dialog>
    
 </template>
@@ -50,16 +73,27 @@ import  DataTable  from 'primevue/datatable'
 import Column from 'primevue/column'
 import axios from 'axios'
 import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
 
 const customers = ref([])
+
+const selectedCity = ref(null)
+
+const options = [
+  { name: 'ELETRÔNICO', code: 'ELETRÔNICO' },
+  { name: 'ELETRODOMÉSTICO', code: 'ELETRODOMÉSTICO' },
+  { name: 'MÓVEL', code: 'MÓVEL' }
+]
 
 
 
 const visible = ref(false)
 
 const form = ref({
-  username: '',
-  email: ''
+  descricao: '',
+  codigo: 0,
+  valorFornecedor: 0,
+  quantidadeEstoque: 0
 })
 
 onMounted(() => {
@@ -77,12 +111,35 @@ async function fetchCustomers() {
   }
 }
 
+async function fetchSalvarCustomer() {
+  try {
+    const response = await axios.post('http://localhost:8080/api/produtos', form.value)
+    console.log('Produto salvo:', response.data)
+    visible.value = false
+    await fetchCustomers() // recarrega tabela
+    form.value = {
+      descricao: '',
+      codigo: '',
+      tipoProduto: '',
+      valorFornecedor: ''
+    }
+  } catch (error) {
+    console.error('Erro ao salvar produto:', error)
+  }
+}
+
 function editCustomer(customer) {
   console.log('Editar:', customer)
 }
 
 function deleteCustomer(customer) {
   console.log('Excluir:', customer)
+}
+
+function salvarCustomer(customer) {
+  console.log('salvar:', customer)
+  console.log('salvar 2:', form.value)
+  fetchSalvarCustomer();
 }
 </script>
 
