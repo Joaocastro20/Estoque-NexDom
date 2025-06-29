@@ -3,6 +3,7 @@ package io.github.joaocastro20.estoqueNexdom.service;
 import io.github.joaocastro20.estoqueNexdom.domain.MovimentoEstoque;
 import io.github.joaocastro20.estoqueNexdom.domain.Produto;
 import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoMovimentacao;
+import io.github.joaocastro20.estoqueNexdom.record.OrderRecord;
 import io.github.joaocastro20.estoqueNexdom.repository.MovimentoEstoqueRepository;
 import io.github.joaocastro20.estoqueNexdom.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,6 +18,8 @@ public class MovimentoEstoqueService {
 
     private final ProdutoRepository produtoRepository;
 
+    private final OrderService orderService;
+
 
     public MovimentoEstoque registrarMovimento(String codigoProduto, MovimentoEstoque movimento) {
         Produto produto = produtoRepository.findByCodigo(codigoProduto)
@@ -27,7 +30,10 @@ public class MovimentoEstoqueService {
         } else if (movimento.getTipoMovimentacao() == TipoMovimentacao.SAÍDA) {
             int novaQuantidade = produto.getQuantidadeEstoque() - movimento.getQuantidadeMovimentada();
             if (novaQuantidade < 0) {
+                OrderRecord order = new OrderRecord(produto.getId(), produto.getCodigo(), produto.getDescricao(), movimento.getQuantidadeMovimentada().doubleValue());
+                orderService.sendMessageOrder(order);
                 throw new IllegalArgumentException("Estoque insuficiente para saída.");
+
             }
             produto.setQuantidadeEstoque(novaQuantidade);
         } else {
