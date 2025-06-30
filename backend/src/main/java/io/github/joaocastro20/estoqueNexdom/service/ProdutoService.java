@@ -38,7 +38,11 @@ public class ProdutoService {
     }
 
     public void excluirPorCodigo(String codigo) {
-        produtoRepository.deleteByCodigo(codigo);
+        Produto produto = produtoRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new RuntimeException("Produto com código '" + codigo + "' não encontrado."));
+
+        produtoRepository.delete(produto);
+        System.out.println("Produto excluído: " + produto);
     }
 
     public List<Produto> buscarPorTipo(TipoProduto tipoProduto) {

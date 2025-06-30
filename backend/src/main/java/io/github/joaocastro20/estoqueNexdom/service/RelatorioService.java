@@ -32,7 +32,7 @@ public class RelatorioService {
             map.put("id", produto.getId());
             map.put("codigo", produto.getCodigo());
             map.put("descricao", produto.getDescricao());
-            map.put("tipoProduto", produto.getTipoProduto().toString()); // aqui é o ponto!
+            map.put("tipoProduto", produto.getTipoProduto().toString());
             map.put("valorFornecedor", "R$ " + String.format("%.2f", produto.getValorFornecedor()));
             map.put("quantidadeEstoque", produto.getQuantidadeEstoque());
             return map;

@@ -21,9 +21,9 @@ public class RelatorioController {
     @GetMapping("/total")
     public ResponseEntity<byte[]> gerarRelatorioTotal() throws Exception {
         Map<String, Object> parametros = new HashMap<>();
-        parametros.put("titulo", "Relatório de Produtos");
+        parametros.put("titulo", "Relatório Total de Produtos");
 
-        byte[] pdf = relatorioService.relatorioTotal(parametros, "stock");
+        byte[] pdf = relatorioService.relatorioTotal(parametros, "stockV2");
 
         return ResponseEntity.ok()
                 .header("Content-Disposition", "inline; filename=relatorio_produtos.pdf")
