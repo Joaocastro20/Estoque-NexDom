@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="relatorio_produtos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20" uuid="b73e2e4e-2376-4a1f-b208-6f58f823a6dd">
+
+    <style name="Cabecalho" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Helvetica-Bold" forecolor="#FFFFFF" backcolor="#87CEEB" mode="Opaque" hAlign="Left" vAlign="Middle"/>
+    <style name="Detalhe" fontName="SansSerif" fontSize="10" hAlign="Left" vAlign="Middle"/>
+    <style name="Titulo" fontName="SansSerif" fontSize="16" isBold="true" hAlign="Center" vAlign="Middle"/>
+
+    <parameter name="titulo" class="java.lang.String"/>
+
+    <field name="codigo" class="java.lang.String"/>
+    <field name="descricao" class="java.lang.String"/>
+    <field name="tipoProduto" class="java.lang.String"/>
+    <field name="valorFornecedor" class="java.lang.String"/>
+    <field name="quantidadeEstoque" class="java.lang.Integer"/>
+
+    <title>
+        <band height="40">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="30" style="Titulo"/>
+                <textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="20">
+            <staticText>
+                <reportElement x="0" y="0" width="60" height="20" style="Cabecalho"/>
+                <text><![CDATA[Código]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="60" y="0" width="150" height="20" style="Cabecalho"/>
+                <text><![CDATA[Descrição]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="210" y="0" width="100" height="20" style="Cabecalho"/>
+                <text><![CDATA[Tipo]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="310" y="0" width="100" height="20" style="Cabecalho"/>
+                <text><![CDATA[Valor (R$)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="410" y="0" width="100" height="20" style="Cabecalho"/>
+                <text><![CDATA[Estoque]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="60" height="20" style="Detalhe"/>
+                <textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="60" y="0" width="150" height="20" style="Detalhe"/>
+                <textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="210" y="0" width="100" height="20" style="Detalhe"/>
+                <textFieldExpression><![CDATA[$F{tipoProduto}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="310" y="0" width="100" height="20" style="Detalhe"/>
+                <textFieldExpression><![CDATA[$F{valorFornecedor}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="410" y="0" width="100" height="20" style="Detalhe"/>
+                <textFieldExpression><![CDATA[$F{quantidadeEstoque}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>
