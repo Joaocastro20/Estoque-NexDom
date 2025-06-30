@@ -36,4 +36,10 @@ public class MovimentoEstoque {
 
     @Column(name = "quantidade_movimentada", nullable = false)
     private Integer quantidadeMovimentada;
+
+    @Override
+    public String toString() {
+        return "MovimentoEstoque{" +
+                "id=" + id;
+    }
 }

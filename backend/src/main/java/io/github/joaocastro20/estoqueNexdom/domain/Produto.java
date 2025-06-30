@@ -1,7 +1,6 @@
 package io.github.joaocastro20.estoqueNexdom.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.github.joaocastro20.estoqueNexdom.domain.MovimentoEstoque;
 import io.github.joaocastro20.estoqueNexdom.domain.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,4 +38,16 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<MovimentoEstoque> movimentos;
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", codigo='" + codigo + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", tipoProduto=" + tipoProduto +
+                ", valorFornecedor=" + valorFornecedor +
+                ", quantidadeEstoque=" + quantidadeEstoque +
+                '}';
+    }
 }
