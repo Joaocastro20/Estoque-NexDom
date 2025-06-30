@@ -27,7 +27,7 @@ public class MovimentoEstoqueService {
 
         if (movimento.getTipoMovimentacao() == TipoMovimentacao.ENTRADA) {
             produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + movimento.getQuantidadeMovimentada());
-        } else if (movimento.getTipoMovimentacao() == TipoMovimentacao.SAÍDA) {
+        } else if (movimento.getTipoMovimentacao() == TipoMovimentacao.SAIDA) {
             int novaQuantidade = produto.getQuantidadeEstoque() - movimento.getQuantidadeMovimentada();
             if (novaQuantidade < 0) {
                 OrderRecord order = new OrderRecord(produto.getId(), produto.getCodigo(), produto.getDescricao(), movimento.getQuantidadeMovimentada().doubleValue());
