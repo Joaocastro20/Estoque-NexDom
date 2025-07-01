@@ -1,7 +1,8 @@
-package io.github.joaocastro20.estoqueNexdom.controller;
+package io.github.joaocastro20.estoquenexdom.controller;
 
-import io.github.joaocastro20.estoqueNexdom.service.RelatorioService;
+import io.github.joaocastro20.estoquenexdom.service.RelatorioService;
 import lombok.RequiredArgsConstructor;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class RelatorioController {
     private final RelatorioService relatorioService;
 
     @GetMapping("/total")
-    public ResponseEntity<byte[]> gerarRelatorioTotal() throws Exception {
+    public ResponseEntity<byte[]> gerarRelatorioTotal() throws JRException {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("titulo", "Relatório Total de Produtos");
 

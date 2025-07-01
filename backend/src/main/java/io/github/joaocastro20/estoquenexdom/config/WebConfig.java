@@ -1,4 +1,4 @@
-package io.github.joaocastro20.estoqueNexdom.config;
+package io.github.joaocastro20.estoquenexdom.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

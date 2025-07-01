@@ -1,7 +1,7 @@
-package io.github.joaocastro20.estoqueNexdom.domain;
+package io.github.joaocastro20.estoquenexdom.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.github.joaocastro20.estoqueNexdom.domain.enums.*;
+import io.github.joaocastro20.estoquenexdom.domain.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 

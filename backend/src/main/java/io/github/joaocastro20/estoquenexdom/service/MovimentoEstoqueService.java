@@ -1,11 +1,11 @@
-package io.github.joaocastro20.estoqueNexdom.service;
+package io.github.joaocastro20.estoquenexdom.service;
 
-import io.github.joaocastro20.estoqueNexdom.domain.MovimentoEstoque;
-import io.github.joaocastro20.estoqueNexdom.domain.Produto;
-import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoMovimentacao;
-import io.github.joaocastro20.estoqueNexdom.record.OrderRecord;
-import io.github.joaocastro20.estoqueNexdom.repository.MovimentoEstoqueRepository;
-import io.github.joaocastro20.estoqueNexdom.repository.ProdutoRepository;
+import io.github.joaocastro20.estoquenexdom.domain.MovimentoEstoque;
+import io.github.joaocastro20.estoquenexdom.domain.Produto;
+import io.github.joaocastro20.estoquenexdom.domain.enums.TipoMovimentacao;
+import io.github.joaocastro20.estoquenexdom.record.OrderRecord;
+import io.github.joaocastro20.estoquenexdom.repository.MovimentoEstoqueRepository;
+import io.github.joaocastro20.estoquenexdom.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

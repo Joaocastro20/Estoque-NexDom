@@ -1,15 +1,14 @@
-package io.github.joaocastro20.estoqueNexdom.service;
+package io.github.joaocastro20.estoquenexdom.service;
 
-import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoProduto;
-import io.github.joaocastro20.estoqueNexdom.repository.ProdutoRepository;
-import io.github.joaocastro20.estoqueNexdom.domain.Produto;
+import io.github.joaocastro20.estoquenexdom.domain.enums.TipoProduto;
+import io.github.joaocastro20.estoquenexdom.repository.ProdutoRepository;
+import io.github.joaocastro20.estoquenexdom.domain.Produto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +41,6 @@ public class ProdutoService {
                 .orElseThrow(() -> new RuntimeException("Produto com código '" + codigo + "' não encontrado."));
 
         produtoRepository.delete(produto);
-        System.out.println("Produto excluído: " + produto);
     }
 
     public List<Produto> buscarPorTipo(TipoProduto tipoProduto) {

@@ -1,7 +1,7 @@
-package io.github.joaocastro20.estoqueNexdom.domain;
+package io.github.joaocastro20.estoquenexdom.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoMovimentacao;
+import io.github.joaocastro20.estoquenexdom.domain.enums.TipoMovimentacao;
 import jakarta.persistence.*;
 import lombok.*;
 

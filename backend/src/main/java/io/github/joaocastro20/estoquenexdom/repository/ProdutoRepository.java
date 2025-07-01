@@ -1,7 +1,7 @@
-package io.github.joaocastro20.estoqueNexdom.repository;
+package io.github.joaocastro20.estoquenexdom.repository;
 
-import io.github.joaocastro20.estoqueNexdom.domain.Produto;
-import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoProduto;
+import io.github.joaocastro20.estoquenexdom.domain.Produto;
+import io.github.joaocastro20.estoquenexdom.domain.enums.TipoProduto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

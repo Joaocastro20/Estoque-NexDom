@@ -1,4 +1,4 @@
-package io.github.joaocastro20.estoqueNexdom.config;
+package io.github.joaocastro20.estoquenexdom.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.apache.kafka.clients.admin.AdminClientConfig;

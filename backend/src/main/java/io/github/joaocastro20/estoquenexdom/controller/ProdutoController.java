@@ -1,14 +1,13 @@
-package io.github.joaocastro20.estoqueNexdom.controller;
+package io.github.joaocastro20.estoquenexdom.controller;
 
-import io.github.joaocastro20.estoqueNexdom.domain.Produto;
-import io.github.joaocastro20.estoqueNexdom.domain.enums.TipoProduto;
-import io.github.joaocastro20.estoqueNexdom.service.ProdutoService;
+import io.github.joaocastro20.estoquenexdom.domain.Produto;
+import io.github.joaocastro20.estoquenexdom.domain.enums.TipoProduto;
+import io.github.joaocastro20.estoquenexdom.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.List;

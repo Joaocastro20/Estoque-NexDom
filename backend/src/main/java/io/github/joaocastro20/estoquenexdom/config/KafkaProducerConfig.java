@@ -1,6 +1,6 @@
-package io.github.joaocastro20.estoqueNexdom.config;
+package io.github.joaocastro20.estoquenexdom.config;
 
-import io.github.joaocastro20.estoqueNexdom.record.OrderRecord;
+import io.github.joaocastro20.estoquenexdom.record.OrderRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Configuration
 public class KafkaProducerConfig {

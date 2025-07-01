@@ -1,4 +1,4 @@
-package io.github.joaocastro20.estoqueNexdom.domain.enums;
+package io.github.joaocastro20.estoquenexdom.domain.enums;
 
 public enum TipoProduto {
     ELETRONICO,
