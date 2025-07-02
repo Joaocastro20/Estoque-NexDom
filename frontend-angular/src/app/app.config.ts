@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
+import Material from '@primeuix/themes/material';
 
 import { routes } from './app.routes';
 
@@ -12,9 +12,12 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-        providePrimeNG({
+        providePrimeNG({  
             theme: {
-                preset: Aura
+                preset: Material,
+                // options: {
+                //   darkModeSelector: "my-app-dark"
+                // }
             }
         })
   ]
