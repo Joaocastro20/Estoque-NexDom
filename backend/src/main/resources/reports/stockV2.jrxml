@@ -13,8 +13,8 @@
 
     <field name="codigo" class="java.lang.String"/>
     <field name="descricao" class="java.lang.String"/>
-    <field name="tipoProduto" class="java.lang.String"/>
-    <field name="valorFornecedor" class="java.lang.String"/>
+    <field name="tipoProduto" class="io.github.joaocastro20.estoquenexdom.domain.enums.TipoProduto"/>
+    <field name="valorFornecedor" class="java.math.BigDecimal"/>
     <field name="quantidadeEstoque" class="java.lang.Integer"/>
 
     <title>

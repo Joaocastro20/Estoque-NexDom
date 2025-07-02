@@ -9,8 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // REMOVE esta configuração se quiser "remover o CORS"
-                .allowedOrigins("*")
-                .allowedMethods("*");
+        registry.addMapping("/api/**")
+                .allowedOrigins("https://meusite.com")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowCredentials(true);
     }
 }

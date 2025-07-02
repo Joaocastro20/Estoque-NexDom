@@ -7,10 +7,8 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +26,6 @@ public class RelatorioService {
 
     public byte[] relatorioTotal(Map<String, Object> parametros, String nomeTemplate) throws JRException {
         List<Produto> listaProdutos = produtoRepository.findAll();
-        List<Map<String, Object>> produtosMapeados = listaProdutos.stream().map(produto -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", produto.getId());
-            map.put("codigo", produto.getCodigo());
-            map.put("descricao", produto.getDescricao());
-            map.put("tipoProduto", produto.getTipoProduto().toString());
-            map.put("valorFornecedor", "R$ " + String.format("%.2f", produto.getValorFornecedor()));
-            map.put("quantidadeEstoque", produto.getQuantidadeEstoque());
-            return map;
-        }).collect(Collectors.toList());
-        return gerarRelatorio(parametros, produtosMapeados, nomeTemplate);
+        return gerarRelatorio(parametros, listaProdutos, nomeTemplate);
     }
 }
