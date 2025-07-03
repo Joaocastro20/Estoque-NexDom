@@ -3,6 +3,7 @@ import { ProdutoModel } from './produto.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Page } from '../../utils/page';
+import { ProdutoUpdateModel } from './produto-update.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProdutoService  {
@@ -17,6 +18,10 @@ export class ProdutoService  {
 
   salvar(produto: ProdutoModel): Observable<ProdutoModel> {
     return this.http.post<ProdutoModel>(this.apiUrl, produto);
+  }
+
+  editar(produto: ProdutoUpdateModel, codigo: string): Observable<ProdutoModel> {
+    return this.http.put<ProdutoModel>(`${this.apiUrl}/${codigo}`, produto);
   }
 
   excluir(id: number): Observable<void> {

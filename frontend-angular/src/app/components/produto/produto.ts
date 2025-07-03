@@ -38,10 +38,7 @@ export class Produto {
   constructor(private productService: ProdutoService, private messageService: MessageService) { }
 
   ngOnInit() {
-    this.productService.listarTodos().subscribe(data => {
-      console.log("🚀 ~ Produto ~ this.productService.listarTodos ~ data:", data)
-      this.products = data.content;
-    })
+    this.onListProduct();
 
     this.typeProducts = [
       { label: "ELETRONICO", value: "ELETRONICO" },
@@ -50,17 +47,21 @@ export class Produto {
     ]
   }
 
+  onListProduct(){
+    this.productService.listarTodos().subscribe(data => {
+      console.log("🚀 ~ Produto ~ this.productService.listarTodos ~ data:", data)
+      this.products = data.content;
+    })
+  }
+
   onRowEditInit(product: ProdutoModel) {
+    console.log("🚀 ~ Produto ~ onRowEditInit ~ product:", product)
     // this.clonedProducts[product.id as string] = { ...product };
   }
 
   onRowEditSave(product: ProdutoModel) {
-    // if (product.price > 0) {
-    //     delete this.clonedProducts[product.id as string];
-    //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
-    // } else {
-    //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
-    // }
+    const produtoUpdate = product;
+    this.productService.editar(produtoUpdate,product.codigo).subscribe(() => this.onListProduct())
   }
 
   onRowEditCancel(product: ProdutoModel, index: number) {
