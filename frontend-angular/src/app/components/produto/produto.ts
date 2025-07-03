@@ -16,7 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Dialog } from 'primeng/dialog';
-import {gerarNumerosAleatorios} from '../../utils/utils'
+import { gerarNumerosAleatorios } from '../../utils/utils'
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 
 @Component({
@@ -24,7 +25,9 @@ import {gerarNumerosAleatorios} from '../../utils/utils'
   imports: [
     CardModule,
     PanelModule,
-    TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule, FormsModule, HttpClientModule, ConfirmDialog, ToastModule, ButtonModule, Dialog,ReactiveFormsModule
+    TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule,
+    InputTextModule, FormsModule, HttpClientModule, ConfirmDialog, ToastModule, ButtonModule,
+    Dialog, ReactiveFormsModule, PaginatorModule
 
   ],
   providers: [
@@ -42,11 +45,20 @@ export class Produto {
 
   visible: boolean = false;
 
-    showDialog() {
-        this.visible = true;
-    }
+  produtoForm!: FormGroup;
 
-    produtoForm!: FormGroup;
+  first: number = 0;
+
+  rows: number = 5;
+
+  totalRecords: number = 0
+  totalPages: number = 0
+
+  page: number = 0;
+  size: number = 5;
+  sort: string = "id,asc";
+
+
 
   constructor(private productService: ProdutoService, private messageService: MessageService, private confirmationService: ConfirmationService, private fb: FormBuilder) { }
 
@@ -68,10 +80,22 @@ export class Produto {
   }
 
   onListProduct() {
-    this.productService.listarTodos().subscribe(data => {
+    this.productService.listarTodos(this.page, this.size, this.sort).subscribe(data => {
       console.log("🚀 ~ Produto ~ this.productService.listarTodos ~ data:", data)
       this.products = data.content;
+      this.totalPages = data.totalPages;
+      this.totalRecords = data.totalElements;
     })
+  }
+
+  onPageChange(event: PaginatorState) {
+    console.log("🚀 ~ Produto ~ onPageChange ~ event:", event)
+
+    this.first = event.first ?? 0;
+    this.page = event.page ?? 0;
+    this.rows = event.rows ?? 5;
+    this.size = event.rows ?? 5;
+    this.onListProduct();
   }
 
   onRowEditInit(product: ProdutoModel) {
@@ -89,44 +113,47 @@ export class Produto {
     // delete this.clonedProducts[product.id as string];
   }
 
-  onRowSave(){
-      console.log("🚀 ~ Produto ~ onRowSave ~ produtoForm:", this.produtoForm.value)
-      const produtoSalve = this.produtoForm.value;
-      produtoSalve.codigo = gerarNumerosAleatorios(10);
-      this.productService.salvar(this.produtoForm.value).subscribe(()=>{
-        this.onListProduct();
-        this.visible = false;
-        this.produtoForm.reset()
-      })
+  onRowSave() {
+    console.log("🚀 ~ Produto ~ onRowSave ~ produtoForm:", this.produtoForm.value)
+    const produtoSalve = this.produtoForm.value;
+    produtoSalve.codigo = gerarNumerosAleatorios(10);
+    this.productService.salvar(this.produtoForm.value).subscribe(() => {
+      this.onListProduct();
+      this.visible = false;
+      this.produtoForm.reset()
+    })
   }
-     
+
+  showDialog() {
+    this.visible = true;
+  }
 
   onRowTrash(event: Event, product: ProdutoModel) {
-        this.confirmationService.confirm({
-            target: event.target as EventTarget,
-            message: `Você deseja deletar o produto: ${product.descricao}`,
-            header: 'Excluir',
-            icon: 'pi pi-info-circle',
-            rejectLabel: 'Cancel',
-            rejectButtonProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true,
-            },
-            acceptButtonProps: {
-                label: 'Delete',
-                severity: 'danger',
-            },
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Você deseja deletar o produto: ${product.descricao}`,
+      header: 'Excluir',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
 
-            accept: () => {
-                this.productService.excluir(product.codigo).subscribe(() => {
-                  this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: `Produto ${product.codigo} foi deleletado com sucesso!` });
-                  this.onListProduct();
-                })
-                
-            }
-        });
-    }
+      accept: () => {
+        this.productService.excluir(product.codigo).subscribe(() => {
+          this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: `Produto ${product.codigo} foi deleletado com sucesso!` });
+          this.onListProduct();
+        })
+
+      }
+    });
+  }
 
   getSeverity(status: string) {
     switch (status) {

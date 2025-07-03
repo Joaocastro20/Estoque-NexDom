@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProdutoModel } from './produto.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Page } from '../../utils/page';
 import { ProdutoUpdateModel } from './produto-update.model';
@@ -13,8 +13,12 @@ export class ProdutoService  {
   constructor(private http: HttpClient) {
   }
 
-  listarTodos(): Observable<Page<ProdutoModel>> {
-  return this.http.get<Page<ProdutoModel>>(this.apiUrl);
+  listarTodos(page: number, size: number, sort: string): Observable<Page<ProdutoModel>> {
+    let params = new HttpParams()
+    .set('page', page)
+    .set('size', size)
+    .set('sort', sort)
+  return this.http.get<Page<ProdutoModel>>(this.apiUrl, {params});
     }
 
   salvar(produto: ProdutoSaveModel): Observable<ProdutoModel> {
