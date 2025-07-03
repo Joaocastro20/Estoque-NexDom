@@ -1,0 +1,5 @@
+export enum TipoProduto {
+  MOVEL = 'MOVEL',
+  ELETRONICO = 'ELETRONICO',
+  ELETRODOMESTICO = 'ELETRODOMESTICO'
+}
