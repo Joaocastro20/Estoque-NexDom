@@ -11,20 +11,25 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProdutoService } from '../../domain/produto/produto.service';
 import { ProdutoModel } from '../../domain/produto/produto.model';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { Dialog } from 'primeng/dialog';
+import {gerarNumerosAleatorios} from '../../utils/utils'
+
 
 @Component({
   selector: 'app-produto',
   imports: [
     CardModule,
     PanelModule,
-    TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule, FormsModule, HttpClientModule
+    TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule, FormsModule, HttpClientModule, ConfirmDialog, ToastModule, ButtonModule, Dialog,ReactiveFormsModule
 
   ],
   providers: [
     MessageService,
-    ProdutoService
+    ProdutoService, ConfirmationService, MessageService
   ],
   templateUrl: './produto.html',
   styleUrl: './produto.css'
@@ -35,9 +40,24 @@ export class Produto {
 
   typeProducts!: SelectItem[];
 
-  constructor(private productService: ProdutoService, private messageService: MessageService) { }
+  visible: boolean = false;
+
+    showDialog() {
+        this.visible = true;
+    }
+
+    produtoForm!: FormGroup;
+
+  constructor(private productService: ProdutoService, private messageService: MessageService, private confirmationService: ConfirmationService, private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.produtoForm = this.fb.group({
+      descricao: [null, [Validators.required]],
+      tipoProduto: [null, [Validators.required]],
+      valorFornecedor: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+      quantidadeEstoque: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
+    });
+
     this.onListProduct();
 
     this.typeProducts = [
@@ -47,7 +67,7 @@ export class Produto {
     ]
   }
 
-  onListProduct(){
+  onListProduct() {
     this.productService.listarTodos().subscribe(data => {
       console.log("🚀 ~ Produto ~ this.productService.listarTodos ~ data:", data)
       this.products = data.content;
@@ -61,7 +81,7 @@ export class Produto {
 
   onRowEditSave(product: ProdutoModel) {
     const produtoUpdate = product;
-    this.productService.editar(produtoUpdate,product.codigo).subscribe(() => this.onListProduct())
+    this.productService.editar(produtoUpdate, product.codigo).subscribe(() => this.onListProduct())
   }
 
   onRowEditCancel(product: ProdutoModel, index: number) {
@@ -69,6 +89,44 @@ export class Produto {
     // delete this.clonedProducts[product.id as string];
   }
 
+  onRowSave(){
+      console.log("🚀 ~ Produto ~ onRowSave ~ produtoForm:", this.produtoForm.value)
+      const produtoSalve = this.produtoForm.value;
+      produtoSalve.codigo = gerarNumerosAleatorios(10);
+      this.productService.salvar(this.produtoForm.value).subscribe(()=>{
+        this.onListProduct();
+        this.visible = false;
+        this.produtoForm.reset()
+      })
+  }
+     
+
+  onRowTrash(event: Event, product: ProdutoModel) {
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: `Você deseja deletar o produto: ${product.descricao}`,
+            header: 'Excluir',
+            icon: 'pi pi-info-circle',
+            rejectLabel: 'Cancel',
+            rejectButtonProps: {
+                label: 'Cancel',
+                severity: 'secondary',
+                outlined: true,
+            },
+            acceptButtonProps: {
+                label: 'Delete',
+                severity: 'danger',
+            },
+
+            accept: () => {
+                this.productService.excluir(product.codigo).subscribe(() => {
+                  this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: `Produto ${product.codigo} foi deleletado com sucesso!` });
+                  this.onListProduct();
+                })
+                
+            }
+        });
+    }
 
   getSeverity(status: string) {
     switch (status) {

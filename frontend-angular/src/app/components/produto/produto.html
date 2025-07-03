@@ -1,11 +1,18 @@
 <p-panel header="Produto">
     <p-table [value]="products" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template #caption>
+            <div class="flex items-center justify-between">
+                <span class="text-xl font-bold">Products</span>
+                <p-button (click)="showDialog()" icon="pi pi-plus" rounded raised />
+            </div>
+        </ng-template>
         <ng-template #header>
             <tr>
                 <th style="width:22%">Código</th>
                 <th style="width:22%">Descrição</th>
                 <th style="width:22%">Tipo Produto</th>
                 <th style="width:22%">Valor Fornecedor</th>
+                <th style="width:22%">Quantidade</th>
                 <th style="width:12%"></th>
             </tr>
         </ng-template>
@@ -53,6 +60,16 @@
                     </p-cellEditor>
                 </td>
                 <td>
+                    <p-cellEditor>
+                        <ng-template #input>
+                            <input maxlength="10" pInputText type="number" [(ngModel)]="product.quantidadeEstoque" />
+                        </ng-template>
+                        <ng-template #output>
+                            {{product.quantidadeEstoque}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
                     <div class="flex items-center justify-center gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                             (click)="onRowEditInit(product)" text rounded severity="secondary"></button>
@@ -60,9 +77,43 @@
                             (click)="onRowEditSave(product)" text rounded severity="secondary"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                             (click)="onRowEditCancel(product, ri)" text rounded severity="secondary"></button>
+                        <button pButton pRipple type="button" pCancelEditableRow icon="pi pi-trash"
+                            (click)="onRowTrash($event, product)" text rounded severity="secondary"></button>
                     </div>
                 </td>
             </tr>
         </ng-template>
     </p-table>
+    <div class="card flex justify-center gap-2">
+        <p-toast />
+        <p-confirmdialog />
+    </div>
+    <div class="card flex justify-center">
+        <p-dialog header="Cadastro de Produtos" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+             <form [formGroup]="produtoForm" (ngSubmit)="onRowSave()">
+                <div class="flex items-center gap-4 mb-4">
+                <label for="descricao" class="font-semibold w-24">Descrição</label>
+                <input pInputText formControlName="descricao" id="descricao" class="flex-auto" autocomplete="off" maxlength="100"/>
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <label for="email" class="font-semibold w-24">Tipo Produto</label>
+                <p-select formControlName="tipoProduto" [options]="typeProducts" appendTo="body" 
+                                [style]="{'width':'100%'}" />
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <label for="email" class="font-semibold w-24">Valor Fornecedor</label>
+                <input formControlName="valorFornecedor" maxlength="10" pInputText type="number" />
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <label for="email" class="font-semibold w-24">Quantidade</label>
+                <input formControlName="quantidadeEstoque" maxlength="10" pInputText type="number" />
+            </div>
+            <div class="flex justify-end gap-2">
+                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+                <p-button type="submit" label="Save" [disabled]="produtoForm.invalid"/>
+            </div>
+             </form>
+            
+        </p-dialog>
+    </div>
 </p-panel>
