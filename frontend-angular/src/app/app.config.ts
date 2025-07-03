@@ -12,13 +12,16 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-        providePrimeNG({  
-            theme: {
-                preset: Material,
-                // options: {
-                //   darkModeSelector: "my-app-dark"
-                // }
-            }
-        })
+    providePrimeNG({
+      theme: {
+        preset: Material,
+        options: {
+          cssLayer: {
+            name: 'primeng',
+            order: 'theme, base, primeng'
+          }
+        }
+      }
+    })
   ]
 };
