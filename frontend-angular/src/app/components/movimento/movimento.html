@@ -1,0 +1,22 @@
+<p-panel header="Registrar Movimentações">
+    <form [formGroup]="movimentoForm" (ngSubmit)="onSave()">
+        <div class="card flex flex-wrap justify-center items-end gap-4">
+            <p-floatlabel>
+                <input pInputText id="codigo" formControlName="codigo" autocomplete="off" maxlength="10"/>
+                <label for="Código">Código</label>
+            </p-floatlabel>
+            <p-select formControlName="tipoMovimentacao" [options]="typeProducts" appendTo="body"
+                [style]="{'width':'10%'}" />
+            <p-floatlabel>
+                <input pInputText id="quantidadeMovimentada" formControlName="quantidadeMovimentada" autocomplete="off" maxlength="10"/>
+                <label for="Quantidade">Quantidade</label>
+            </p-floatlabel>
+            <p-floatlabel>
+                <input pInputText id="valorVenda" formControlName="valorVenda" autocomplete="off" maxlength="10"/>
+                <label for="Valor">Valor</label>
+            </p-floatlabel>
+            <p-button type="submit" [label]="this.movimentoForm.get('tipoMovimentacao')?.value == 'ENTRADA' ? 'Salvar Entrada' : 'Salvar Saída'" [disabled]="movimentoForm.invalid" [style]="{'font-size': '18px'}"/>
+        </div>
+    </form>
+    <p-toast />
+</p-panel>
