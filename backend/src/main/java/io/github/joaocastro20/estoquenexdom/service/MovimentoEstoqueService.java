@@ -8,7 +8,11 @@ import io.github.joaocastro20.estoquenexdom.repository.MovimentoEstoqueRepositor
 import io.github.joaocastro20.estoquenexdom.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,9 @@ public class MovimentoEstoqueService {
 
     private final OrderService orderService;
 
+    public Page<MovimentoEstoque> listarTodos(Pageable pegeable){
+        return movimentoEstoqueRepository.findAll(pegeable);
+    }
 
     public MovimentoEstoque registrarMovimento(String codigoProduto, MovimentoEstoque movimento) {
         Produto produto = produtoRepository.findByCodigo(codigoProduto)

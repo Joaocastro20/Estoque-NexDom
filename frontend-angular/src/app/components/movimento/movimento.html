@@ -1,22 +1,71 @@
 <p-panel header="Registrar Movimentações">
-    <form [formGroup]="movimentoForm" (ngSubmit)="onSave()">
-        <div class="card flex flex-wrap justify-center items-end gap-4">
-            <p-floatlabel>
-                <input pInputText id="codigo" formControlName="codigo" autocomplete="off" maxlength="10"/>
-                <label for="Código">Código</label>
-            </p-floatlabel>
-            <p-select formControlName="tipoMovimentacao" [options]="typeProducts" appendTo="body"
-                [style]="{'width':'10%'}" />
-            <p-floatlabel>
-                <input pInputText id="quantidadeMovimentada" formControlName="quantidadeMovimentada" autocomplete="off" maxlength="10"/>
-                <label for="Quantidade">Quantidade</label>
-            </p-floatlabel>
-            <p-floatlabel>
-                <input pInputText id="valorVenda" formControlName="valorVenda" autocomplete="off" maxlength="10"/>
-                <label for="Valor">Valor</label>
-            </p-floatlabel>
-            <p-button type="submit" [label]="this.movimentoForm.get('tipoMovimentacao')?.value == 'ENTRADA' ? 'Salvar Entrada' : 'Salvar Saída'" [disabled]="movimentoForm.invalid" [style]="{'font-size': '18px'}"/>
+
+    <div class="card">
+        <p-splitter [style]="{ height: '300px' }" class="mb-8" layout="vertical">
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full" [style]="{ 'margin': '5px' }">
+                    <form [formGroup]="movimentoForm" (ngSubmit)="onSave()">
+                        <div class="card flex flex-wrap justify-center items-end gap-4">
+                            <p-floatlabel>
+                                <input pInputText id="codigo" formControlName="codigo" autocomplete="off"
+                                    maxlength="10" />
+                                <label for="Código">Código</label>
+                            </p-floatlabel>
+                            <p-select formControlName="tipoMovimentacao" [options]="typeProducts" appendTo="body"
+                                [style]="{'width':'20%'}" />
+                            <p-floatlabel>
+                                <input pInputText id="quantidadeMovimentada" formControlName="quantidadeMovimentada"
+                                    autocomplete="off" maxlength="10" />
+                                <label for="Quantidade">Quantidade</label>
+                            </p-floatlabel>
+                            <p-floatlabel>
+                                <input pInputText id="valorVenda" formControlName="valorVenda" autocomplete="off"
+                                    maxlength="10" />
+                                <label for="Valor">Valor</label>
+                            </p-floatlabel>
+                            <p-button type="submit"
+                                [label]="this.movimentoForm.get('tipoMovimentacao')?.value == 'ENTRADA' ? 'Salvar Entrada' : 'Salvar Saída'"
+                                [disabled]="movimentoForm.invalid" [style]="{'font-size': '18px'}" />
+                        </div>
+                    </form>
+                </div>
+
+            </ng-template>
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full">
+                    <div class="card flex justify-center">
+                        <p-togglebutton [(ngModel)]="checked" onLabel="On" offLabel="Off" class="w-24" />
+                    </div>
+                </div>
+            </ng-template>
+        </p-splitter>
+        <div>
+            <div class="flex items-center justify-center h-full">
+                <p-table [value]="listMovimento" [tableStyle]="{ 'min-width': '50rem' }" [size]="'small'">
+                    <ng-template #caption>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold">Historico</span>
+                        </div>
+                    </ng-template>
+                    <ng-template #header>
+                        <tr>
+                            <th style="width:25%">Tipo</th>
+                            <th style="width:25%">Valor</th>
+                            <th style="width:25%">Data/Hora</th>
+                            <th style="width:25%">Quantidade</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-customer>
+                        <tr>
+                            <td>{{ customer.tipoMovimentacao }}</td>
+                            <td>{{ customer.valorVenda | currency: 'BRL' }}</td>
+                            <td>{{ customer.dataVenda | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+                            <td>{{ customer.quantidadeMovimentada }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
         </div>
-    </form>
+    </div>
     <p-toast />
 </p-panel>

@@ -12,10 +12,18 @@ import { MovimentoService } from '../../domain/movimento/movimento.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+import { SplitterModule } from 'primeng/splitter';
+import { MovimentoModel } from '../../domain/movimento/movimento.model';
+import { TableModule } from 'primeng/table';
+import { CommonModule } from '@angular/common';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
   selector: 'app-movimento',
-  imports: [CardModule, InputTextModule, FormsModule, FloatLabel, ReactiveFormsModule, SelectModule, ButtonModule, MessageModule, PanelModule, HttpClientModule, Toast],
+  imports: [CardModule, InputTextModule, FormsModule, 
+    FloatLabel, ReactiveFormsModule, SelectModule, ButtonModule,
+     MessageModule, PanelModule, HttpClientModule, Toast, SplitterModule,
+    TableModule, CommonModule, ToggleButtonModule ],
   templateUrl: './movimento.html',
   styleUrl: './movimento.css',
   providers: [MovimentoService, MessageService]
@@ -24,6 +32,14 @@ export class Movimento {
   movimentoForm!: FormGroup;
 
   typeProducts!: SelectItem[];
+
+  listMovimento!: MovimentoModel[];
+
+  page: number = 0;
+  size: number = 5;
+  sort: string = "id,desc";
+
+  checked: boolean = true;
 
   constructor(private fb: FormBuilder, private movimentoService: MovimentoService, private messageService: MessageService) { }
 
@@ -39,6 +55,15 @@ export class Movimento {
       { label: "ENTRADA", value: "ENTRADA" },
       { label: "SAIDA", value: "SAIDA" }
     ]
+
+    this.onListMovimento();
+  }
+
+  onListMovimento(){
+    this.movimentoService.listarTodos(this.page, this.size, this.sort).subscribe(data => {
+      console.log("🚀 ~ Movimento ~ this.movimentoService.listarTodos ~ data:", data)
+      this.listMovimento = data.content;
+    })
   }
 
   onSave() {
@@ -46,6 +71,7 @@ export class Movimento {
       {
         next: response => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Movimento salvo com sucesso' });
+          this.onListMovimento();
         },
         error: err => {
           this.messageService.add({ severity: 'info', summary: 'Info', detail: `${err.error.message}` });
