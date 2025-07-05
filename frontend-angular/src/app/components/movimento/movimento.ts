@@ -17,16 +17,20 @@ import { MovimentoModel } from '../../domain/movimento/movimento.model';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ProdutoService } from '../../domain/produto/produto.service';
+import { MovimentoSaveModel } from '../../domain/movimento/movimento-save.model';
+import { gerarNumerosAleatorios } from '../../utils/utils';
+import { TipoMovimento } from '../../domain/movimento/tipo-movimento.enum';
 
 @Component({
   selector: 'app-movimento',
-  imports: [CardModule, InputTextModule, FormsModule, 
+  imports: [CardModule, InputTextModule, FormsModule,
     FloatLabel, ReactiveFormsModule, SelectModule, ButtonModule,
-     MessageModule, PanelModule, HttpClientModule, Toast, SplitterModule,
-    TableModule, CommonModule, ToggleButtonModule ],
+    MessageModule, PanelModule, HttpClientModule, Toast, SplitterModule,
+    TableModule, CommonModule, ToggleButtonModule],
   templateUrl: './movimento.html',
   styleUrl: './movimento.css',
-  providers: [MovimentoService, MessageService]
+  providers: [MovimentoService, MessageService, ProdutoService]
 })
 export class Movimento {
   movimentoForm!: FormGroup;
@@ -41,7 +45,7 @@ export class Movimento {
 
   checked: boolean = true;
 
-  constructor(private fb: FormBuilder, private movimentoService: MovimentoService, private messageService: MessageService) { }
+  constructor(private fb: FormBuilder, private movimentoService: MovimentoService, private messageService: MessageService, private produtoService: ProdutoService) { }
 
   ngOnInit() {
     this.movimentoForm = this.fb.group({
@@ -59,7 +63,7 @@ export class Movimento {
     this.onListMovimento();
   }
 
-  onListMovimento(){
+  onListMovimento() {
     this.movimentoService.listarTodos(this.page, this.size, this.sort).subscribe(data => {
       console.log("🚀 ~ Movimento ~ this.movimentoService.listarTodos ~ data:", data)
       this.listMovimento = data.content;
@@ -87,5 +91,47 @@ export class Movimento {
     const control = this.movimentoForm.get(controlName);
     return control?.invalid && (control.touched || this.movimentoForm);
   }
+
+  async onRandomSell() {
+    let codigos: string[] = [];
+    
+    this.produtoService.listarTodos(0, 5, 'id,asc').subscribe(data => {
+      codigos = data.content.map(p => p.codigo);
+    })
+  
+    while (!this.checked) {
+      const codigoRandom = codigos[Math.floor(Math.random() * codigos.length)];
+      const tipoMovimentacaoListaFake = Object.values(TipoMovimento);
+      const tipoMovimentacaoFake = tipoMovimentacaoListaFake[Math.floor(Math.random() * tipoMovimentacaoListaFake.length)];
+      
+      let movimentoFake!: MovimentoSaveModel;
+      movimentoFake = {
+        quantidadeMovimentada: parseInt(gerarNumerosAleatorios(1)),
+        valorVenda: parseInt(gerarNumerosAleatorios(3)),
+        dataVenda: new Date(),
+        tipoMovimentacao: tipoMovimentacaoFake
+      }
+      
+      this.movimentoService.salvarMovimento(movimentoFake, codigoRandom).subscribe({
+        next: response => {
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Movimento Fake salvo com sucesso' });
+          this.onListMovimento();
+        },
+        error: err => {
+          this.messageService.add({ severity: 'info', summary: 'Info', detail: `${err.error.message}` });
+        },
+
+        complete: () => {
+        }
+      })
+      await this.delay(1000);
+    }
+    console.log('Parado.');
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 
 }

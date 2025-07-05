@@ -34,7 +34,7 @@
             <ng-template #panel>
                 <div class="flex items-center justify-center h-full">
                     <div class="card flex justify-center">
-                        <p-togglebutton [(ngModel)]="checked" onLabel="On" offLabel="Off" class="w-24" />
+                        <p-togglebutton [(ngModel)]="checked" (onChange)="onRandomSell()" onLabel="On" offLabel="Off" class="w-24" [onLabel]="'Simular Venda'" [offLabel]="'Parar Simulação'" [style]="{ width: '200px' }"  />
                     </div>
                 </div>
             </ng-template>
