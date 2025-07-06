@@ -103,15 +103,17 @@
                 <div class="flex items-center gap-4 mb-8">
                     <label for="email" class="font-semibold w-24">Tipo Produto</label>
                     <p-select formControlName="tipoProduto" [options]="typeProducts" appendTo="body"
-                        [style]="{'width':'100%'}" />
+                        [style]="{'width':'238px'}" />
                 </div>
                 <div class="flex items-center gap-4 mb-8">
                     <label for="email" class="font-semibold w-24">Valor Fornecedor</label>
-                    <input formControlName="valorFornecedor" maxlength="10" pInputText type="number" />
+                    <input formControlName="valorFornecedor" maxlength="10" pInputText type="number"
+                        [style]="{'width':'238px'}" />
                 </div>
                 <div class="flex items-center gap-4 mb-8">
                     <label for="email" class="font-semibold w-24">Quantidade</label>
-                    <input formControlName="quantidadeEstoque" maxlength="10" pInputText type="number" />
+                    <input formControlName="quantidadeEstoque" maxlength="10" pInputText type="number"
+                        [style]="{'width':'238px'}" />
                 </div>
                 <div class="flex justify-end gap-2">
                     <p-button label="Cancel" severity="secondary" (click)="visible = false" />

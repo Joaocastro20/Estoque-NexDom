@@ -81,7 +81,6 @@ export class Produto {
 
   onListProduct() {
     this.productService.listarTodos(this.page, this.size, this.sort).subscribe(data => {
-      console.log("🚀 ~ Produto ~ this.productService.listarTodos ~ data:", data)
       this.products = data.content;
       this.totalPages = data.totalPages;
       this.totalRecords = data.totalElements;
@@ -89,8 +88,6 @@ export class Produto {
   }
 
   onPageChange(event: PaginatorState) {
-    console.log("🚀 ~ Produto ~ onPageChange ~ event:", event)
-
     this.first = event.first ?? 0;
     this.page = event.page ?? 0;
     this.rows = event.rows ?? 5;
@@ -99,8 +96,6 @@ export class Produto {
   }
 
   onRowEditInit(product: ProdutoModel) {
-    console.log("🚀 ~ Produto ~ onRowEditInit ~ product:", product)
-    // this.clonedProducts[product.id as string] = { ...product };
   }
 
   onRowEditSave(product: ProdutoModel) {
@@ -109,12 +104,9 @@ export class Produto {
   }
 
   onRowEditCancel(product: ProdutoModel, index: number) {
-    // this.products[index] = this.clonedProducts[product.id as string];
-    // delete this.clonedProducts[product.id as string];
   }
 
   onRowSave() {
-    console.log("🚀 ~ Produto ~ onRowSave ~ produtoForm:", this.produtoForm.value)
     const produtoSalve = this.produtoForm.value;
     produtoSalve.codigo = gerarNumerosAleatorios(10);
     this.productService.salvar(this.produtoForm.value).subscribe(() => {
