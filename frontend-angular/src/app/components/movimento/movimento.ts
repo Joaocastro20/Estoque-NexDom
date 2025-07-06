@@ -21,6 +21,7 @@ import { ProdutoService } from '../../domain/produto/produto.service';
 import { MovimentoSaveModel } from '../../domain/movimento/movimento-save.model';
 import { gerarNumerosAleatorios } from '../../utils/utils';
 import { TipoMovimento } from '../../domain/movimento/tipo-movimento.enum';
+import { ProdutoModel } from '../../domain/produto/produto.model';
 
 @Component({
   selector: 'app-movimento',
@@ -38,6 +39,7 @@ export class Movimento {
   typeProducts!: SelectItem[];
 
   listMovimento!: MovimentoModel[];
+  listProduto!: ProdutoModel[];
 
   page: number = 0;
   size: number = 5;
@@ -61,19 +63,24 @@ export class Movimento {
     ]
 
     this.onListMovimento();
+    this.onListProduto();
   }
 
   onListMovimento() {
     this.movimentoService.listarTodos(this.page, this.size, this.sort).subscribe(data => {
-      console.log("🚀 ~ Movimento ~ this.movimentoService.listarTodos ~ data:", data)
       this.listMovimento = data.content;
     })
+  }
+
+  onListProduto() {
+    this.produtoService.listarTodos(0, 5, 'id,asc').subscribe(
+      data => this.listProduto = data.content)
   }
 
   onSave() {
     this.movimentoService.salvarMovimento(this.movimentoForm.value, this.movimentoForm.get("codigo")?.value).subscribe(
       {
-        next: response => {
+        next: () => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Movimento salvo com sucesso' });
           this.onListMovimento();
         },
@@ -93,17 +100,13 @@ export class Movimento {
   }
 
   async onRandomSell() {
-    let codigos: string[] = [];
-    
-    this.produtoService.listarTodos(0, 5, 'id,asc').subscribe(data => {
-      codigos = data.content.map(p => p.codigo);
-    })
-  
+    let codigos: string[] = this.listProduto.map(p => p.codigo);
+
     while (!this.checked) {
       const codigoRandom = codigos[Math.floor(Math.random() * codigos.length)];
       const tipoMovimentacaoListaFake = Object.values(TipoMovimento);
       const tipoMovimentacaoFake = tipoMovimentacaoListaFake[Math.floor(Math.random() * tipoMovimentacaoListaFake.length)];
-      
+
       let movimentoFake!: MovimentoSaveModel;
       movimentoFake = {
         quantidadeMovimentada: parseInt(gerarNumerosAleatorios(1)),
@@ -111,9 +114,9 @@ export class Movimento {
         dataVenda: new Date(),
         tipoMovimentacao: tipoMovimentacaoFake
       }
-      
+
       this.movimentoService.salvarMovimento(movimentoFake, codigoRandom).subscribe({
-        next: response => {
+        next: () => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Movimento Fake salvo com sucesso' });
           this.onListMovimento();
         },
@@ -126,7 +129,6 @@ export class Movimento {
       })
       await this.delay(1000);
     }
-    console.log('Parado.');
   }
 
   delay(ms: number) {
