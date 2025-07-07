@@ -26,6 +26,9 @@ public class RelatorioService {
 
     public byte[] relatorioTotal(Map<String, Object> parametros, String nomeTemplate) throws JRException {
         List<Produto> listaProdutos = produtoRepository.findAll();
+        if(listaProdutos.isEmpty()){
+            throw new IllegalArgumentException("Não Há Produtos Cadastrados!");
+        }
         return gerarRelatorio(parametros, listaProdutos, nomeTemplate);
     }
 }
