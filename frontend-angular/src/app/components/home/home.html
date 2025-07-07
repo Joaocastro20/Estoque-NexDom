@@ -1,8 +1,87 @@
-<p-panel >
-    <p-card header="Home">
-    <p class="m-0">
-        Home
-    </p>
-</p-card>
-</p-panel>
+<p-panel>
+    <div class="card flex flex-col items-center overflow-hidden">
 
+        <div class="flex flex-col items-center gap-2">
+            <span class="text-xl font-medium">Scroll Down</span>
+            <span
+                class="animate-bounce h-8 w-8 bg-primary text-primary-contrast rounded-full inline-flex items-center justify-center">
+                <i class="pi pi-arrow-down"></i>
+            </span>
+        </div>
+        <div class="h-[40rem]"></div>
+        <div class="flex flex-wrap justify-center gap-8">
+            <div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-l-8 animate-duration-1000"
+                leaveClass="animate-leave fade-out-0"
+                class="flex flex-col border border-surface shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <div class="rounded-full bg-primary text-primary-contrast w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-box !text-2xl"></i>
+                </div>
+                <span class="text-2xl font-bold">Cadastro de Produtos</span>
+                <span class="text-muted-color text-center">CRUD de produtos com pageable.</span>
+            </div>
+            <div pAnimateOnScroll enterClass="animate-enter fade-in-10 animate-duration-1000"
+                leaveClass="animate-leave fade-out-0"
+                class="flex flex-col border border-surface shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <div class="rounded-full bg-primary text-primary-contrast w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-cart-plus !text-2xl"></i>
+                </div>
+                <span class="text-2xl font-bold">Movimentação dos Produtos</span>
+                <span class="text-muted-color text-center">Entrada e Saida com historico dos produtos.</span>
+            </div>
+            <div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"
+                leaveClass="animate-leave fade-out-0"
+                class="flex flex-col border border-surface shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <div class="rounded-full bg-primary text-primary-contrast w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-file-pdf !text-2xl"></i>
+                </div>
+                <span class="text-2xl font-bold">Relatórios</span>
+                <span class="text-muted-color text-center">Relatórios gerados com Jasper.</span>
+            </div>
+        </div>
+        <div class="h-[30rem]"></div>
+        <div class="flex flex-wrap justify-center gap-8">
+            <div pAnimateOnScroll enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+                class="flex flex-col bg-purple-500 text-white border-purple-500 shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <div class="rounded-full border-2 border-white w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-envelope !text-2xl"></i>
+                </div>
+                <span class="text-2xl font-bold">Kafka</span>
+                <span class="text-center">Tópico criado para receber vendas que não há estoque.</span>
+            </div>
+            <div pAnimateOnScroll enterClass="animate-enter fade-in-10 zoom-in-75 animate-duration-1000"
+                class="flex flex-col bg-teal-500 text-white border-teal-500 shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <div class="rounded-full border-2 border-white w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-database !text-2xl"></i>
+                </div>
+                <span class="text-2xl font-bold">Banco de Dados</span>
+                <span class="text-center">H2 banco em memória.</span>
+            </div>
+            <div pAnimateOnScroll enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+                class="flex flex-col bg-indigo-500 text-white border-indigo-500 shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <div class="rounded-full border-2 border-white w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-file-pdf !text-2xl"></i>
+                </div>
+                <span class="text-2xl font-bold">Jasper</span>
+                <span class="text-center">Relatórios Jasper.</span>
+            </div>
+        </div>
+        <div class="h-[30rem]"></div>
+
+        <span class="text-2xl font-bold block text-center mb-8">
+            Vendas Não Realizadas Por Falta De Estoque (Tópico Kafka)
+        </span>
+
+        <div class="flex flex-wrap justify-center gap-8">
+            <div *ngFor="let msg of listMensagens" pAnimateOnScroll
+                [enterClass]="'animate-enter fade-in-10 spin-in-45 slide-in-from-t-12 animate-duration-1000'"
+                class="flex flex-col bg-primary text-primary-contrast border-primary shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
+                <span class="bg-white/20 text-xl font-medium rounded-xl px-4 py-2">
+                    {{ msg.amount | currency: 'BRL' }}
+                </span>
+                <span class="text-2xl font-bold">{{ msg.description }}</span>
+                <span class="text-center">{{ msg.name }}</span>
+            </div>
+        </div>
+
+    </div>
+</p-panel>

@@ -5,7 +5,7 @@
               name="relatorio_produtos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20"
               topMargin="20" bottomMargin="20" uuid="b73e2e4e-2376-4a1f-b208-6f58f823a6dd">
 
-    <style name="Cabecalho" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Helvetica-Bold" forecolor="#FFFFFF" backcolor="#87CEEB" mode="Opaque" hAlign="Left" vAlign="Middle"/>
+    <style name="Cabecalho" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Helvetica-Bold" forecolor="#FFFFFF" backcolor="#90EE90" mode="Opaque" hAlign="Left" vAlign="Middle"/>
     <style name="Detalhe" fontName="SansSerif" fontSize="10" hAlign="Left" vAlign="Middle"/>
     <style name="Titulo" fontName="SansSerif" fontSize="16" isBold="true" hAlign="Center" vAlign="Middle"/>
 

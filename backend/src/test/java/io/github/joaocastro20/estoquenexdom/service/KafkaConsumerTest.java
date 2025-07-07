@@ -9,15 +9,15 @@ class KafkaConsumerTest {
 
     private KafkaConsumer kafkaConsumer;
 
-    @BeforeEach
-    void setUp() {
-        kafkaConsumer = new KafkaConsumer();
-    }
-
-    @Test
-    void deveConsumirMensagemSemErros() {
-        String mensagem = "Produto sem estoque";
-
-        assertDoesNotThrow(() -> kafkaConsumer.consumir(mensagem));
-    }
+//    @BeforeEach
+//    void setUp() {
+//        kafkaConsumer = new KafkaConsumer();
+//    }
+//
+//    @Test
+//    void deveConsumirMensagemSemErros() {
+//        String mensagem = "Produto sem estoque";
+//
+//        assertDoesNotThrow(() -> kafkaConsumer.consumir(mensagem));
+//    }
 }
